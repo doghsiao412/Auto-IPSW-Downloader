@@ -1,0 +1,14 @@
+.DS_Store
+__pycache__/
+*.pyc
+data/
+ssh/
+disk-id
+dsm-task*.json
+.env
+.env.*
+*.ipsw
+*.partial
+*.log
+dist/
+deploy.env

@@ -1,0 +1,14 @@
+data
+tests
+__pycache__
+*.pyc
+README.md
+.git
+ssh
+disk-id
+dsm-task*.json
+.env
+.env.*
+deploy.env*
+mac
+dist

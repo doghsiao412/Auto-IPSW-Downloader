@@ -1,0 +1,34 @@
+services:
+  ipsw:
+    build: .
+    container_name: auto-ipsw-downloader
+    restart: unless-stopped
+    user: "1026:100"
+    network_mode: host
+    volumes:
+      - ./data:/data
+      - ./ssh:/keys:ro
+    environment:
+      DATA_DIR: /data
+      PUBLIC_HOST: ${PUBLIC_HOST:?請在 deploy.env 設定 PUBLIC_HOST}
+      BIND_ADDRESS: 127.0.0.1
+      PORT: "18766"
+      EXPORT_SSH: ${NAS_USER:?請在 deploy.env 設定 NAS_USER}@127.0.0.1
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os, urllib.request as u; u.urlopen(u.Request('http://%s:%s/api/status' % (os.environ['BIND_ADDRESS'], os.environ['PORT']), headers={'Host': os.environ['PUBLIC_HOST']}), timeout=5)"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
