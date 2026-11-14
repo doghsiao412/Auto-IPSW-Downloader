@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from notifications import Notifications
 
-spec = importlib.util.spec_from_file_location('exporter', ROOT / 'exporter.py')
+spec = importlib.util.spec_from_file_location('exporter', ROOT / 'docker' / 'exporter.py')
 exporter = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(exporter)
 

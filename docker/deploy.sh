@@ -4,6 +4,7 @@ set -eu
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 test "$(id -u)" = 0 || { echo '請用 sudo 執行'; exit 1; }
 src=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+root=$(dirname "$src")  # shared engine and web page live one level up
 base=/volume1/docker/ipsw-downloader
 # Site-specific values live in deploy.env (not in the repository); see deploy.env.example.
 test -f "$src/deploy.env" || { echo '找不到 deploy.env，請先複製 deploy.env.example 並填入設定'; exit 1; }
@@ -13,8 +14,8 @@ mount=/volumeUSB1/usbshare
 python3 -c 'import os; assert os.path.ismount("/volumeUSB1/usbshare"), "外接硬碟未掛載，停止安裝"'
 docker info --format 'Docker {{.ServerVersion}} / {{.Driver}}'
 mkdir -p "$base/web" "$base/data/staging" "$base/ssh"
-cp "$src/server.py" "$src/notifications.py" "$src/exporter.py" "$src/dsm-mail-report.py" "$src/Dockerfile" "$src/compose.yaml" "$src/.dockerignore" "$base/"
-cp "$src/web/index.html" "$src/web/app.js" "$src/web/style.css" "$base/web/"
+cp "$root/server.py" "$root/notifications.py" "$src/exporter.py" "$src/dsm-mail-report.py" "$src/Dockerfile" "$src/compose.yaml" "$src/.dockerignore" "$base/"
+cp "$root/web/index.html" "$root/web/app.js" "$root/web/style.css" "$base/web/"
 printf 'NAS_USER=%s\nPUBLIC_HOST=%s\n' "$NAS_USER" "$PUBLIC_HOST" > "$base/.env"
 chmod 644 "$base/.env"
 chmod 755 "$base"

@@ -10,5 +10,3 @@ dsm-task*.json
 .env
 .env.*
 deploy.env*
-mac
-dist
